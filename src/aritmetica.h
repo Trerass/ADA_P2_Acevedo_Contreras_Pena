@@ -100,8 +100,10 @@ std::pair<Numero, Numero> partir(const Numero& A, std::size_t m);
 // número) hasta la misma longitud n, donde n es la menor potencia de 2
 // mayor o igual que max(A.size(), B.size()). Un dígito da n = 1.
 // No normaliza después de rellenar.
-// Karatsuba debe llamarla en CADA llamada recursiva (sobre copias), porque
-// P3 = (x1 + x0)(y1 + y0) puede recibir operandos de m + 1 dígitos.
+// Karatsuba la llama UNA sola vez, al inicio. Dentro de la recursión solo
+// iguala longitudes: x1 + x0 puede tener m + 1 dígitos, y rellenarlo a
+// potencia de 2 lo llevaría a 2m = n, el mismo tamaño del padre, y se
+// perdería el costo Θ(n^log2(3)).
 // Costo: Θ(n).
 void rellenarPotencia2(Numero& A, Numero& B);
 
