@@ -1,9 +1,6 @@
 // test_correctitud.cpp
-// Validación de multiplicacionClasica y karatsuba, sin frameworks externos.
-// La clásica se verifica contra un oráculo independiente (unsigned long long
-// para números pequeños y una fórmula cerrada para números grandes) y
-// karatsuba se verifica contra la clásica. Al final se imprime "OK" o la
-// cantidad de fallos, y el código de salida es distinto de 0 si algo falló.
+// Comprueba que Karatsuba da lo mismo que la clásica, y que la clásica da
+// el resultado correcto. Imprime "OK" o los casos que fallaron.
 
 #include "../src/aritmetica.h"
 #include "../src/multiplicacion.h"
@@ -15,7 +12,7 @@
 static int fallos = 0;
 static int verificaciones = 0;
 
-// Como assert, pero no aborta: registra el fallo, dice cuál fue y sigue.
+// Como assert, pero no detiene el programa: anota el fallo y sigue.
 #define VERIFICAR(cond, descripcion)                                         \
     do {                                                                     \
         verificaciones++;                                                    \
@@ -26,7 +23,7 @@ static int verificaciones = 0;
         }                                                                    \
     } while (0)
 
-static std::mt19937_64 rng(20261028);  // semilla fija: pruebas reproducibles
+static std::mt19937_64 rng(20261028);  // semilla fija: siempre los mismos casos
 
 // Cadena aleatoria de exactamente n dígitos, sin cero inicial.
 static std::string cadenaAleatoria(std::size_t n) {
@@ -39,15 +36,15 @@ static std::string cadenaAleatoria(std::size_t n) {
     return s;
 }
 
-// Multiplica a y b (cadenas decimales) con ambos algoritmos, verifica que
-// coincidan entre sí y, si se da, con el resultado esperado.
+// Multiplica a y b con los dos métodos y compara. Si se da "esperado",
+// también lo compara con ese resultado.
 static void verificarProducto(const std::string& a, const std::string& b,
                               const std::string& esperado = "") {
     Numero A = desdeString(a);
     Numero B = desdeString(b);
     std::string clasica = aString(multiplicacionClasica(A, B));
     std::string kara = aString(karatsuba(A, B));
-    std::string pura = aString(karatsuba(A, B, 1));  // recursión hasta 1 dígito
+    std::string pura = aString(karatsuba(A, B, 1));  // parte hasta 1 dígito
     std::string caso = a.substr(0, 20) + " x " + b.substr(0, 20);
     if (!esperado.empty()) {
         VERIFICAR(clasica == esperado, "clasica " + caso);
@@ -56,13 +53,12 @@ static void verificarProducto(const std::string& a, const std::string& b,
     VERIFICAR(pura == clasica, "karatsuba(umbral 1) == clasica en " + caso);
 }
 
-// Producto de referencia para números de hasta 9 dígitos: cabe en
-// unsigned long long (solo se usa como oráculo, no en los algoritmos).
+// Resultado correcto para números de hasta 9 dígitos (solo para probar).
 static std::string productoNativo(const std::string& a, const std::string& b) {
     return std::to_string(std::stoull(a) * std::stoull(b));
 }
 
-// (10^n - 1)^2 = 10^(2n) - 2*10^n + 1 = "9"*(n-1) + "8" + "0"*(n-1) + "1".
+// 99...9 al cuadrado da 99...980...01. Ejemplo: 999^2 = 998001.
 static std::string cuadradoDeNueves(std::size_t n) {
     return std::string(n - 1, '9') + "8" + std::string(n - 1, '0') + "1";
 }
@@ -100,7 +96,7 @@ static void probarCerosIntercalados() {
 }
 
 static void probarLongitudes() {
-    // Longitudes impares y distintas antes del relleno a potencia de 2.
+    // Longitudes impares y distintas entre sí.
     for (std::size_t la = 1; la <= 9; la++) {
         for (std::size_t lb = 1; lb <= 9; lb++) {
             std::string a = cadenaAleatoria(la);
@@ -113,7 +109,7 @@ static void probarLongitudes() {
 }
 
 static void probarGrandes() {
-    // Todos nueves: fuerza acarreo en cada suma (x1 + x0 con m + 1 dígitos).
+    // Puros nueves: obligan a llevar acarreo en todas las sumas.
     for (std::size_t n : {2u, 3u, 64u, 255u, 500u, 1024u}) {
         std::string nueves(n, '9');
         verificarProducto(nueves, nueves, cuadradoDeNueves(n));
