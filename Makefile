@@ -23,17 +23,24 @@ endif
 
 ARITMETICA = src/aritmetica.cpp src/aritmetica.h
 
-TEST_ARITMETICA = test_aritmetica$(EXE)
+MULTIPLICACION = src/multiplicacion.cpp src/multiplicacion.h
 
-all: $(TEST_ARITMETICA)
+TEST_ARITMETICA  = test_aritmetica$(EXE)
+TEST_CORRECTITUD = test_correctitud$(EXE)
+
+all: $(TEST_ARITMETICA) $(TEST_CORRECTITUD)
 
 $(TEST_ARITMETICA): tests/test_aritmetica.cpp $(ARITMETICA)
 	$(CXX) $(CXXFLAGS) -o $@ tests/test_aritmetica.cpp src/aritmetica.cpp
 
-test: $(TEST_ARITMETICA)
+$(TEST_CORRECTITUD): tests/test_correctitud.cpp $(ARITMETICA) $(MULTIPLICACION)
+	$(CXX) $(CXXFLAGS) -o $@ tests/test_correctitud.cpp src/aritmetica.cpp src/multiplicacion.cpp
+
+test: $(TEST_ARITMETICA) $(TEST_CORRECTITUD)
 	$(RUN)$(TEST_ARITMETICA)
+	$(RUN)$(TEST_CORRECTITUD)
 
 clean:
-	-$(RM) $(TEST_ARITMETICA)
+	-$(RM) $(TEST_ARITMETICA) $(TEST_CORRECTITUD)
 
 .PHONY: all test clean
