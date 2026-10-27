@@ -1,0 +1,12 @@
+# Ejecutables y objetos
+*.o
+*.obj
+*.exe
+test_aritmetica
+test_correctitud
+benchmark
+build/
+
+# Editores
+.vscode/
+*.swp
