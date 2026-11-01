@@ -70,6 +70,15 @@ Si todo funciona, las pruebas imprimen `OK (N verificaciones)`. Si algo falla, i
 
 > No compile con `-DNDEBUG`: desactivaría el `assert` que protege la precondición de `restar`.
 
+## Medición y gráficas
+
+```
+make bench                    # compila y corre bench/benchmark.cpp -> resultados/tiempos.csv (~40 s)
+python3 scripts/graficar.py   # genera resultados/grafica_*.png y resultados/exponentes.txt (requiere matplotlib)
+```
+
+Protocolo: `std::chrono::steady_clock`, repeticiones hasta superar 200 ms por ensayo, mediana de 5 ensayos, resultado consumido (suma de dígitos en un `volatile`) y verificación de que clásica y Karatsuba coinciden. Se compara la clásica contra Karatsuba con umbral 1 (pura) y umbral 32 (por defecto). El informe está en `informe/informe.md` (y `informe.pdf`).
+
 ## Estructura del repositorio
 
 ```

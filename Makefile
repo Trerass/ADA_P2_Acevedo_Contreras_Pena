@@ -27,6 +27,7 @@ MULTIPLICACION = src/multiplicacion.cpp src/multiplicacion.h
 
 TEST_ARITMETICA  = test_aritmetica$(EXE)
 TEST_CORRECTITUD = test_correctitud$(EXE)
+BENCHMARK        = benchmark$(EXE)
 
 all: $(TEST_ARITMETICA) $(TEST_CORRECTITUD)
 
@@ -36,11 +37,18 @@ $(TEST_ARITMETICA): tests/test_aritmetica.cpp $(ARITMETICA)
 $(TEST_CORRECTITUD): tests/test_correctitud.cpp $(ARITMETICA) $(MULTIPLICACION)
 	$(CXX) $(CXXFLAGS) -o $@ tests/test_correctitud.cpp src/aritmetica.cpp src/multiplicacion.cpp
 
+$(BENCHMARK): bench/benchmark.cpp $(ARITMETICA) $(MULTIPLICACION)
+	$(CXX) $(CXXFLAGS) -o $@ bench/benchmark.cpp src/aritmetica.cpp src/multiplicacion.cpp
+
+# Genera resultados/tiempos.csv 
+bench: $(BENCHMARK)
+	$(RUN)$(BENCHMARK) resultados/tiempos.csv
+
 test: $(TEST_ARITMETICA) $(TEST_CORRECTITUD)
 	$(RUN)$(TEST_ARITMETICA)
 	$(RUN)$(TEST_CORRECTITUD)
 
 clean:
-	-$(RM) $(TEST_ARITMETICA) $(TEST_CORRECTITUD)
+	-$(RM) $(TEST_ARITMETICA) $(TEST_CORRECTITUD) $(BENCHMARK)
 
-.PHONY: all test clean
+.PHONY: all test bench clean

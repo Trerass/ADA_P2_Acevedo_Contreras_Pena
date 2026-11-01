@@ -10,3 +10,4 @@ build/
 # Editores
 .vscode/
 *.swp
+informe/*.aux
