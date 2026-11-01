@@ -3,6 +3,7 @@ title: "Práctica 2 — Multiplicación rápida de enteros: algoritmo de Karatsu
 subtitle: "Análisis y Diseño de Algoritmos · Divide y Vencerás, recurrencias y Teorema Maestro"
 author: "Juan José Acevedo Otálvaro · Jerónimo Contreras · Juan Esteban Peña"
 date: "1 de noviembre de 2026"
+lang: es
 geometry: margin=2cm
 fontsize: 10.5pt
 mainfont: "DejaVu Serif"
@@ -114,7 +115,7 @@ La causa son las **constantes ocultas**. Karatsuba hace menos *multiplicaciones 
 
 **Justificación del umbral $n_0=32$.** Mediciones del rol B (`resultados/umbral.tsv`, Apple M4) compararon umbrales de 1 a 512: los tiempos mínimos se dan entre 32 y 64, con 64 a menos de 4 % de 32 (dentro del ruido); se eligió el menor del rango. Con umbrales grandes (256 o más) el tiempo sube de nuevo porque se usa la clásica $\Theta(n^2)$ donde ya no conviene. El umbral solo cambia la constante, no el orden: las hojas cuestan $\Theta\!\left(n_0^{\,2-\log_2 3}\,n^{\log_2 3}\right)$.
 
-![Razón $t_{cl\acute{a}sica}/t_{Karatsuba}$: por encima de 1 gana Karatsuba.](../resultados/grafica_razon.png){width=52%}
+![Razón $t_{\text{clásica}}/t_{\text{Karatsuba}}$: por encima de 1 gana Karatsuba.](../resultados/grafica_razon.png){width=52%}
 
 # 5. Conclusiones y dificultades
 
@@ -135,6 +136,6 @@ La causa son las **constantes ocultas**. Karatsuba hace menos *multiplicaciones 
 
 # 6. Declaración de uso de IA
 
-Se usó Claude como apoyo en la parte para  escribir el borrador de `bench/benchmark.cpp` y `scripts/graficar.py`, ejecutar las mediciones, y redactar el borrador de este informe a partir del código que se genero por Juan Esteban Peña en Kali Linux
+El grupo usó Claude (Anthropic) y ChatGPT (OpenAI) como herramientas de apoyo: para entender el enunciado y organizar el trabajo, implementar, revisar y depurar el código, escribir las pruebas y el benchmark, ejecutar y analizar las mediciones, y redactar y revisar este informe y la wiki. Los resultados provienen de ejecutar el código; cada integrante revisó lo que produjo la IA y puede explicarlo. El registro detallado de cada integrante está en la wiki del repositorio, en la página *Uso de Inteligencia Artificial*.
 
-El informe lo escribimos y su usó claude como apoyo en Parafrasear el informe y ponerlo de manera mas formas para la lectura del profesor 
+En la parte experimental, Juan Esteban Peña usó Claude para escribir el borrador de `bench/benchmark.cpp` y `scripts/graficar.py`, ejecutar las mediciones, redactar el borrador de este informe y darle al texto final un registro más formal.
