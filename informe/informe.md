@@ -79,7 +79,7 @@ El exponente es $\log_b a$: el logaritmo del número de subproblemas en la base 
 
 ## 4.1 Montaje
 
-- **Máquina y compilador:** Intel Xeon @ 2.10 GHz (1 núcleo disponible), Linux (Ubuntu 24.04), g++ 13.3.0, `-std=c++17 -O2 -Wall -Wextra`.
+- **Máquina y compilador:** Intel Xeon @ 2.10 GHz (1 núcleo disponible), Linux (Kali Linux), g++ 13.3.0, `-std=c++17 -O2 -Wall -Wextra`.
 - **Tamaños:** $n=2,4,8,\dots,4096$ dígitos. Operandos aleatorios de exactamente $n$ dígitos (semilla fija).
 - **Medición:** `std::chrono::steady_clock`. Cada celda se repite hasta acumular al menos 200 ms; el tiempo es total/repeticiones. Se hacen 5 ensayos por celda y se reporta la **mediana**.
 - **Consumo del resultado:** se suman los dígitos de cada producto en un acumulador `volatile` (así el compilador no elimina el cálculo) y, para cada $n$, se verifica que clásica, Karatsuba (umbral 1) y Karatsuba (umbral 32) den el mismo producto.
